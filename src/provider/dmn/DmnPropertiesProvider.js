@@ -3,8 +3,10 @@ import { Group } from '@bpmn-io/properties-panel';
 import {
   DocumentationProps,
   IdProps,
-  NameProps
+  NameProps,
+  TypeRefProps
 } from './properties';
+
 
 export default class DmnPropertiesProvider {
 
@@ -30,7 +32,8 @@ function getGroups(element) {
 
   const groups = [
     GeneralGroup(element),
-    DocumentationGroup(element)
+    DocumentationGroup(element),
+    VariableGroup(element)
   ];
 
   // contract: if a group returns null, it should not be displayed at all
@@ -68,3 +71,22 @@ function DocumentationGroup(element) {
     component: Group
   };
 }
+
+function VariableGroup(element) {
+
+  const entries = [
+    ...TypeRefProps({ element })
+  ];
+
+  if (!entries.length) {
+    return null;
+  }
+
+  return {
+    id: 'variable',
+    label: 'Variable',
+    entries,
+    component: Group
+  };
+}
+
